@@ -1,0 +1,160 @@
+que 1:-
+
+CREATE TABLE sales(
+   sale_id INT PRIMARY KEY,
+   product_name VARCHAR(50),
+   category VARCHAR(50),
+   price DECIMAL(10,2),
+   quantity_sold INT,
+    sale_date DATE
+);
+
+INSERT INTO sales (sale_id, product_name, category, price, quantity_sold, sale_date) VALUES
+(1, 'Laptop', 'Electronics', 1200.00, 15, '2024-01-15'),
+(2, 'T-Shirt', 'Apparel', 25.50, 50, '2023-11-20'),
+(3, 'Smartphone', 'Electronics', 800.00, 22, '2024-02-01'),
+(4, 'Coffee Table', 'Furniture', 350.00, 13, '2024-01-05'),
+(5, 'Headphones', 'clothing', 150.00, 34, '2023-12-10'),
+(6, 'Jeans', 'Apparel', 60.00, 28, '2024-02-15'),
+(7, 'Desk Chair', 'Furniture', 450.00, 54, '2024-01-25'),
+(8, '4K TV', 'Electronics', 1500.00, 41, '2024-03-01'),
+(9, 'Blender', 'Kitchenware', 90.00, 49, '2023-10-30'),
+(10, 'External SSD', 'clothing', 110.00, 62, '2024-01-10'),
+(11, 'Running Shoes', 'Apparel', 80.00, 17, '2024-02-20');
+
+
+* 1.
+SELECT * FROM sales WHERE category = 'Electronics';
+
+* 2.
+SELECT * FROM sales WHERE price > 500;
+
+*3.
+SELECT * FROM sales WHERE sale_date > '2024-01-01';
+
+
+que :- 2
+
+
+SELECT category, SUM(quantity_sold) AS total_quantity_sold
+FROM sales
+GROUP BY category
+
+
+SELECT category, SUM(quantity_sold) AS total_quantity_sold
+FROM sales
+GROUP BY category
+HAVING SUM(quantity_sold) ;
+
+
+que :-3
+
+SELECT * FROM sales LIMIT 5;
+
+
+SELECT * FROM sales ORDER BY price DESC LIMIT 3;
+
+que :- 4
+
+SELECT * FROM sales WHERE category = 'Clothing' AND price > 100;
+
+que :- 5
+
+SELECT * FROM sales WHERE category = 'Electronics' OR category = 'Furniture';
+
+que :- 6
+
+* 1.
+
+* NOT operator <>
+SELECT * FROM sales WHERE category <> 'Clothing';
+
+* 2.
+
+SELECT * FROM sales WHERE price <= 300;
+
+que :- 7
+
+* 1.
+
+SELECT * FROM sales ORDER BY price ASC;
+
+* 2.
+
+SELECT * FROM sales ORDER BY sale_date DESC;
+
+* 3.
+
+SELECT * FROM sales ORDER BY category ASC;
+SELECT * FROM sales ORDER BY price DESC;
+
+que :- 8
+
+* 1.
+
+SELECT category, SUM(price * quantity_sold) AS total_revenue
+FROM sales
+GROUP BY category;
+
+* 2.
+
+SELECT category, AVG(price) AS average_price
+FROM sales
+GROUP BY category;
+
+
+* 3.
+SELECT category, AVG(price) AS average_price
+FROM sales
+GROUP BY category
+HAVING AVG(price) > 200;
+
+
+* 4.
+SELECT category, product_name, SUM(quantity_sold) AS total_quantity_sold
+FROM sales
+GROUP BY category, product_name;
+
+que :- 9
+
+* 1.
+
+SELECT SUM(price * quantity) AS total_revenue FROM sales;
+
+* 2.
+
+SELECT AVG(price) AS average_price FROM sales;
+
+* 3.
+SELECT MAX(price) AS highest_price, MIN(price) AS lowest_price FROM sales;
+
+* 4.
+SELECT * FROM sales ORDER BY quantity DESC LIMIT 1;
+
+* 5.
+SELECT COUNT(*) AS total_sales_records FROM sales;
+
+* 6.
+SELECT COUNT(DISTINCT category) AS distinct_categories_count FROM sales;
+
+que :- 10
+
+SELECT category, SUM(price) AS total_revenue
+FROM sales
+GROUP BY category
+ORDER BY total_revenue DESC
+LIMIT 3;
+
+que :- 11
+
+SELECT *
+FROM sales
+WHERE (category = 'Electronics' OR category = 'Furniture') AND price > 200;
+
+que :- 12
+
+SELECT sale_date, SUM(price) AS daily_revenue
+FROM sales
+GROUP BY sale_date
+ORDER BY daily_revenue DESC
+LIMIT 3;
