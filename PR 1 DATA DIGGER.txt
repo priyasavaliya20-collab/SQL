@@ -1,0 +1,135 @@
+ 1️⃣ CUSTOMERS TABLES :-
+
+CREATE TABLE Customers (
+    Customer_ID INT PRIMARY KEY,
+    Name VARCHAR(100),
+    Email VARCHAR (100),
+    Address VARCHAR(255)
+);
+
+INSERT INTO Customers (Customer_ID, Name, Email, Address) VALUES
+(101, 'Alice', 'alice@example.com', '12 haivila society'),
+(102, 'Bob', 'bob@example.com', '45 india colony'),
+(103, 'Charlie', 'charlie@example.com', '78 dharti society'),
+(104, 'Alice', 'alice_alt@example.com', '32 panchavti society'),
+(105, 'David', 'david@example.com', '65 vinayak park');
+
+SELECT * FROM Customers;
+
+UPDATE Customers SET Address = 'Updated 32 bhojaldham colony' WHERE Customer_id = 2;
+
+DELETE FROM Customers WHERE Customer_id = 3;
+
+SELECT * FROM Customers WHERE Name ='Alice';
+
+
+
+2️⃣ ORDERS TABLE :-
+
+CREATE TABLE Orders (
+    Order_id INT PRIMARY KEY,
+    Customer_id INT,
+    Order_date DATE,
+    Total_amount DECIMAL(10,2),
+    FOREIGN KEY(Customer_ID) REFERENCES 
+Customers(Customer_ID)
+);
+
+INSERT INTO Orders (Order_id, Customer_id, Order_date, Total_amount) VALUES
+(1, 101, '2024-12-01', 2500.00),
+(2, 102, '2024-12-05', 1800.50),
+(3, 101, '2024-12-10', 3200.75),
+(4, 103, '2025-01-02', 1500.00),
+(5, 104, '2025-01-10', 4200.25);
+
+
+SELECT * FROM Orders WHERE Customer_id = 101;
+
+
+UPDATE Orders
+SET Total_amount = 2000.00
+WHERE Order_id = 2;
+
+
+DELETE FROM Orders
+WHERE Order_id = 4;
+
+SELECT *
+FROM Orders
+WHERE Order_date >= CURRENT_DATE - INTERVAL 30 DAY;
+
+
+SELECT 
+    MAX(Total_amount) AS HighestAmount,
+    MIN(Total_amount) AS LowestAmount,
+    AVG(Total_amount) AS AverageAmount
+FROM Orders;
+
+
+
+3️⃣ PRODUCTS TABLE :-
+
+CREATE TABLE Products (
+    Product_id INT PRIMARY KEY,
+    Product_Name VARCHAR(255),
+    Price DECIMAL(10, 2),
+    Stock INT
+);
+
+INSERT INTO Products (Product_id, Product_Name, Price, Stock) VALUES
+(1, 'Laptop', 75000.00, 15),
+(2, 'Mouse', 800.00, 0),
+(3, 'Keyboard', 1200.00, 50),
+(4, 'Monitor', 15000.00, 25),
+(5, 'USB Drive', 450.00, 100),
+(6, 'Headphones', 2500.00, 0);  
+
+SELECT * FROM Products ORDER BY Price DESC;
+
+UPDATE Products SET Price = 900.00 WHERE Product_id = 2;
+
+DELETE FROM Products WHERE Stock = 0;
+
+SELECT * FROM Products WHERE Price BETWEEN 500.00 AND 2000.00;
+
+SELECT MAX(Price) AS MostExpensive FROM Products;
+
+SELECT MIN(Price) AS Cheapest FROM Products;
+
+4️⃣ ORDERDEDETAILS TABLE :-
+
+CREATE TABLE OrderDetails (
+    OrderDetail_ID INT PRIMARY KEY,
+    Order_id INT,
+    Product_id INT,
+    Quantity INT,
+    Sub_Total DECIMAL(10,2),
+    FOREIGN KEY (Order_id) REFERENCES Orders(Order_id),
+    FOREIGN KEY (Product_id) REFERENCES Products(Product_id)
+);
+
+INSERT INTO OrderDetails VALUES
+(1,101,1,1,55000),
+(2,101,2,1,15000),
+(3,102,4,2,1600),
+(4,103,3,1,2000),
+(5,105,5,2,1000);
+
+
+SELECT * FROM OrderDetails
+WHERE Order_id = 101;
+
+SELECT SUM(SubTotal)
+FROM OrderDetails;
+
+
+SELECT Product_id, SUM(Quantity) AS TotalQty
+FROM OrderDetails
+GROUP BY Product_id
+ORDER BY TotalQty DESC
+LIMIT 3;
+
+SELECT COUNT(*) 
+FROM OrderDetails
+WHERE ProductID = 1;
+
