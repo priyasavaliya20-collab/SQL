@@ -1,0 +1,188 @@
+---------------------------
+QUESTION :- 1
+---------------------------
+
+1️⃣ PRODUCTS table
+
+CREATE TABLE products (
+  price INT
+);
+
+INSERT INTO products VALUES (300);
+INSERT INTO products VALUES (1200);
+INSERT INTO products VALUES (3000);
+
+SELECT price,
+CASE
+  WHEN price < 500 THEN 'Low'
+  WHEN price < 2000 THEN 'Medium'
+  ELSE 'High'
+END AS category
+FROM products;
+
+2️⃣ CUSTOMERS table
+
+CREATE TABLE customers (
+  total_purchases INT,
+  failed_payments INT
+);
+
+INSERT INTO customers VALUES (2, 0);
+INSERT INTO customers VALUES (10, 1);
+INSERT INTO customers VALUES (20, 3);
+
+SELECT total_purchases,
+CASE
+  WHEN total_purchases < 5 THEN 'New'
+  WHEN total_purchases < 15 THEN 'Regular'
+  ELSE 'VIP'
+END AS loyalty
+FROM customers;
+
+3️⃣ EMPLOYEES table
+
+CREATE TABLE employees (
+  years_experience INT,
+  performance_score INT
+);
+
+INSERT INTO employees VALUES (1, 70);
+INSERT INTO employees VALUES (3, 85);
+INSERT INTO employees VALUES (6, 95);
+
+SELECT years_experience,
+CASE
+  WHEN years_experience < 2 THEN 'Junior'
+  WHEN years_experience < 5 THEN 'Mid-Level'
+  ELSE 'Senior'
+END AS level
+FROM employees;
+
+4️⃣ rating table
+
+CREATE TABLE reviews (
+  rating INT
+);
+
+INSERT INTO reviews VALUES (1);
+INSERT INTO reviews VALUES (2);
+INSERT INTO reviews VALUES (3);
+INSERT INTO reviews VALUES (4);
+
+SELECT rating,
+CASE
+  WHEN rating = 1 THEN 'Poor'
+  WHEN rating = 2 THEN 'Average'
+  WHEN rating = 3 THEN 'Good'
+  WHEN rating = 4 THEN 'Excellent'
+END AS rating_text
+FROM reviews;
+
+5️⃣ order table 
+
+CREATE TABLE orders (
+  shipping_cost INT
+);
+
+INSERT INTO orders VALUES (0);
+INSERT INTO orders VALUES (50);
+INSERT INTO orders VALUES (120);
+
+
+SELECT shipping_cost,
+CASE
+  WHEN shipping_cost = 0 THEN 'Free'
+  ELSE 'Paid'
+END AS shipping_type
+FROM orders;
+
+-----------------------
+QUESTION :- 2
+-----------------------
+
+1️⃣ order table 
+
+CREATE TABLE order (
+  quantity INT
+);
+
+INSERT INTO order VALUES (3);
+INSERT INTO order VALUES (8);
+INSERT INTO order VALUES (15);
+
+SELECT quantity,
+CASE
+  WHEN quantity > 10 THEN 20
+  ELSE 10
+END AS discount
+FROM order;
+
+2️⃣ Order Delay
+
+CREATE TABLE orders (
+  delay_days INT
+);
+
+INSERT INTO orders VALUES (2);
+INSERT INTO orders VALUES (4);
+INSERT INTO orders VALUES (7);
+
+SELECT delay_days,
+CASE
+  WHEN delay_days > 5 THEN 'Late'
+  ELSE 'On Time'
+END AS status
+FROM orders;
+
+3️⃣ Customer Risk
+
+CREATE TABLE customers (
+  failed_payments INT
+);
+
+INSERT INTO customers VALUES (0);
+INSERT INTO customers VALUES (1);
+INSERT INTO customers VALUES (3);
+
+SELECT failed_payments,
+CASE
+  WHEN failed_payments > 2 THEN 'High'
+  ELSE 'Low'
+END AS risk
+FROM customers;
+
+4️⃣ Employee Bonus
+
+CREATE TABLE employees (
+  performance_score INT
+);
+
+INSERT INTO employees VALUES (70);
+INSERT INTO employees VALUES (85);
+INSERT INTO employees VALUES (95);
+
+SELECT performance_score,
+CASE
+  WHEN performance_score > 80 THEN 5000
+  ELSE 2000
+END AS bonus
+FROM employees;
+
+
+5️⃣ Store Profit
+
+CREATE TABLE stores (
+  revenue INT,
+  expenses INT
+);
+
+INSERT INTO stores VALUES (50000, 40000);
+INSERT INTO stores VALUES (30000, 35000);
+INSERT INTO stores VALUES (20000, 20000);
+
+SELECT revenue, expenses,
+CASE
+  WHEN revenue > expenses THEN 'Profit'
+  ELSE 'Loss'
+END AS result
+FROM stores;

@@ -1,0 +1,157 @@
+QUESTION :- 1
+
+CREATE TABLE employees (
+    emp_id INT,
+    emp_name VARCHAR(50),
+    dept_id INT
+);
+
+CREATE TABLE departments (
+    dept_id INT,
+    dept_name VARCHAR(50)
+);
+
+CREATE TABLE projects (
+    project_id INT PRIMARY KEY,
+    project_name VARCHAR(50),
+    emp_id INT
+);
+
+INSERT INTO departments(dept_id,dept_name) VALUES 
+(1, 'HR'),
+(2, 'IT'),
+(3, 'Finance'),
+(4, 'Marketing');
+
+INSERT INTO employees(emp_id,emp_name,dept_id) VALUES
+(101, 'Amit', 1),
+(102, 'Ravi', 2),
+(103, 'Neha', 2),
+(104, 'Pooja', NULL),
+(105, 'Karan', 3);
+
+INSERT INTO projects (project_id,project_name,emp_id) VALUES
+(201, 'Website', 102),
+(202, 'Payroll System', 105),
+(203, 'Recruitment App', NULL);
+
+
+
+QUESTION :- 2
+
+SELECT e.emp_name, d.dept_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id;
+
+SELECT e.emp_name
+FROM employees e
+INNER JOIN departments d
+ON e.dept_id = d.dept_id;
+
+SELECT DISTINCT d.dept_name
+FROM departments d
+INNER JOIN employees e
+ON d.dept_id = e.dept_id;
+
+SELECT e.emp_name, p.project_name
+FROM employees e
+INNER JOIN projects p
+ON e.emp_id = p.emp_id;
+
+QUESTION :- 3
+
+SELECT e.emp_id, e.emp_name, d.dept_name
+FROM employees e
+LEFT JOIN departments d
+ON e.dept_id = d.dept_id;
+
+SELECT e.emp_id, e.emp_name
+FROM employees e
+LEFT JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE d.dept_id IS NULL;
+
+SELECT p.project_name, e.emp_name
+FROM projects p
+LEFT JOIN employees e
+ON p.emp_id = e.emp_id;
+
+SELECT c.customer_name, o.amount
+FROM customers c
+LEFT JOIN orders o
+ON c.customer_id = o.customer_id;
+
+QUESTION :- 4
+
+SELECT d.dept_name, e.emp_name
+FROM employees e
+RIGHT JOIN departments d
+ON e.dept_id = d.dept_id;
+
+SELECT d.dept_name
+FROM employees e
+RIGHT JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.emp_id IS NULL;
+
+SELECT p.project_name, e.emp_name
+FROM employees e
+RIGHT JOIN projects p
+ON e.emp_id = p.emp_id;
+
+SELECT r.rep_name, c.customer_name
+FROM customers c
+RIGHT JOIN sales_representatives r
+ON c.rep_id = r.rep_id;
+
+QUESTION :- 5
+
+SELECT e.emp_name, d.dept_name
+FROM employees e
+FULL OUTER JOIN departments d
+ON e.dept_id = d.dept_id;
+
+SELECT e.emp_name, d.dept_name
+FROM employees e
+FULL OUTER JOIN departments d
+ON e.dept_id = d.dept_id
+WHERE e.dept_id IS NULL
+   OR d.dept_id IS NULL;
+
+SELECT s.supplier_name, c.customer_name
+FROM suppliers s
+FULL OUTER JOIN customers c
+ON s.supplier_id = c.customer_id;
+
+SELECT p.product_name, s.sale_id
+FROM products p
+FULL OUTER JOIN sales s
+ON p.product_id = s.product_id;
+
+QUESTION :- 6
+
+SELECT e.emp_name, d.dept_name, p.project_name
+FROM employees e
+JOIN departments d ON e.dept_id=d.dept_id
+JOIN projects p ON e.emp_id=p.emp_id;
+
+
+SELECT e.emp_name, d.dept_name, c.customer_name
+FROM employees e
+JOIN departments d ON e.dept_id=d.dept_id
+JOIN orders o ON e.emp_id = o.emp_id
+JOIN customers c ON o.customer_id = c.customer_id;
+
+
+SELECT c.customer_name, o.order_id, p.product_name
+FROM customers c
+JOIN orders o ON c.customer_id = o.customer_id
+JOIN products p ON o.product_id = p.product_id;
+
+
+SELECT d.dept_name, SUM(o.order_amount) total_sales
+FROM departments d
+JOIN employees e ON d.dept_id = e.dept_id
+JOIN orders o ON e.emp_id = o.emp_id
+GROUP BY d.dept_name;

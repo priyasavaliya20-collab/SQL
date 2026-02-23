@@ -1,0 +1,104 @@
+QUESTION :- 1
+
+1. Orders ko number dena (latest order = 1)
+SELECT 
+    order_id,
+    order_date,
+    ROW_NUMBER() OVER (ORDER BY order_date DESC) AS order_no
+FROM orders;
+
+2. Har category ka running total of sales
+SELECT
+    category,
+    sales,
+    SUM(sales) OVER (
+        PARTITION BY category 
+        ORDER BY sale_date
+    ) AS running_total
+FROM sales;
+
+3. Department wise average salary (employee salary bhi dikhe)
+SELECT
+    emp_name,
+    department,
+    salary,
+    AVG(salary) OVER (PARTITION BY department) AS avg_salary
+FROM employees;
+
+4. Customers ko rank karna (same purchase = same rank)
+SELECT
+    customer_id,
+    SUM(sales) AS total_purchase,
+    RANK() OVER (ORDER BY SUM(sales) DESC) AS rank_no
+FROM orders
+GROUP BY customer_id;
+
+5. Order sales aur category average ka difference
+SELECT
+    order_id,
+    category,
+    sales,
+    sales - AVG(sales) OVER (PARTITION BY category) AS diff_from_avg
+FROM orders;
+
+QUESTION :- 2
+
+1.
+SELECT *
+FROM (
+    SELECT
+        product_id,
+        category,
+        SUM(sales) AS total_sales,
+        RANK() OVER (
+            PARTITION BY category
+            ORDER BY SUM(sales) DESC
+        ) AS product_rank_in_category
+    FROM sales
+    GROUP BY product_id, category
+) ranked_products
+WHERE product_rank_in_category <= 3;
+
+
+2. Employee salary ka % contribution (department total mein)
+SELECT
+    emp_name,
+    department,
+    salary,
+    (salary * 100.0 / SUM(salary) OVER (PARTITION BY department)) 
+    AS salary_percent
+FROM employees;
+
+3. Previous aur Next order date (customer wise)
+SELECT
+    customer_id,
+    order_date,
+    LAG(order_date) OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date
+    ) AS previous_order,
+    LEAD(order_date) OVER (
+        PARTITION BY customer_id 
+        ORDER BY order_date
+    ) AS next_order
+FROM orders;
+
+4. Last 7 days ka moving average (product wise)
+SELECT
+    product_id,
+    sale_date,
+    sales,
+    AVG(sales) OVER (
+        PARTITION BY product_id
+        ORDER BY sale_date
+        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+    ) AS moving_avg_7_days
+FROM sales;
+
+5. Region wise highest & lowest sales (sab rows visible)
+SELECT
+    region,
+    sales,
+    MAX(sales) OVER (PARTITION BY region) AS max_sales,
+    MIN(sales) OVER (PARTITION BY region) AS min_sales
+FROM regions;

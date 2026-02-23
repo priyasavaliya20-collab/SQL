@@ -1,0 +1,251 @@
+CREATE TABLE sales (
+    sale_id INT,
+    sales_date DATE,
+    amount INT
+);
+
+INSERT INTO sales VALUES
+(1, '2024-01-10', 5000),
+(2, '2024-02-15', 7000),
+(3, '2024-03-20', 9000);
+
+
+CREATE TABLE logs (
+    log_id INT,
+    log_time TIMESTAMP
+);
+
+INSERT INTO logs VALUES
+(1, '2024-02-01 10:15:00'),
+(2, '2024-02-01 14:30:00'),
+(3, '2024-02-01 10:45:00');
+
+
+CREATE TABLE orders (
+    order_id INT,
+    order_date DATE,
+    delivery_date DATE
+);
+
+INSERT INTO orders VALUES
+(1, '2024-01-05', '2024-01-10'),
+(2, '2024-01-07', '2024-01-12'),
+(3, '2024-01-13', '2024-01-18');
+
+
+CREATE TABLE employees (
+    emp_id INT,
+    emp_name VARCHAR(50),
+    join_date DATE
+);
+
+INSERT INTO employees VALUES
+(1, 'Rahul', '2023-10-01'),
+(2, 'Amit', '2024-01-15'),
+(3, 'Neha', '2024-02-10');
+
+
+CREATE TABLE customers (
+    customer_id INT,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    first_purchase_date DATE,
+    last_purchase_date DATE
+);
+
+INSERT INTO customers VALUES
+(1, 'Ravi', 'Kumar', '2023-02-01', '2024-01-10'),
+(2, 'Anita', 'Sharma', '2023-03-05', NULL),
+(3, 'Pooja', 'Verma', '2023-02-01', '2023-02-01');
+
+CREATE TABLE events (
+    event_id INT,
+    event_date DATE
+);
+
+INSERT INTO events VALUES
+(1, DATE_ADD(CURDATE(), INTERVAL 10 DAY)),
+(2, DATE_ADD(CURDATE(), INTERVAL 40 DAY));
+
+
+CREATE TABLE logins (
+    login_id INT,
+    login_time TIMESTAMP
+);
+
+INSERT INTO logins VALUES
+(1, '2024-02-01 09:00:00'),
+(2, '2024-02-01 09:30:00'),
+(3, '2024-02-01 18:00:00');
+
+
+CREATE TABLE transactions (
+    transaction_id INT,
+    transaction_date DATE,
+    amount INT
+);
+
+INSERT INTO transactions VALUES
+(1, '2024-01-05', 2000),
+(2, '2024-01-15', 8000),
+(3, '2024-02-10', 5000);
+
+
+CREATE TABLE products (
+    product_id INT,
+    product_code VARCHAR(20)
+);
+
+INSERT INTO products VALUES
+(1, 'ABC123'),
+(2, 'XYZ789');
+
+
+CREATE TABLE addresses (
+    address_id INT,
+    city VARCHAR(50)
+);
+
+INSERT INTO addresses VALUES
+(1, 'delhi'),
+(2, 'mumbai');
+
+CREATE TABLE companies (
+    company_id INT,
+    company_name VARCHAR(100)
+);
+
+INSERT INTO companies VALUES
+(1, 'TechSoft Inc.'),
+(2, 'DataSolutions Inc.');
+
+
+
+QUESTION :- 1
+
+Q1. sales_date se year, month aur day alag-alag nikaalna
+SELECT 
+    YEAR(sales_date) AS year,
+    MONTH(sales_date) AS month,
+    DAY(sales_date) AS day
+FROM sales;
+
+Q2. logs table ke timestamp se hour aur minute nikaalna
+SELECT 
+    HOUR(log_time) AS hour,
+    MINUTE(log_time) AS minute
+FROM logs;
+
+Q3. order_date ko DD-MM-YYYY format me dikhana
+SELECT 
+    DATE_FORMAT(order_date, '%d-%m-%Y') AS formatted_date
+FROM orders;
+
+Q4. Datetime column se sirf date part dikhana
+SELECT 
+    DATE(order_datetime) AS order_date
+FROM orders;
+
+Q5. Weekend par place hue orders nikaalna
+SELECT *
+FROM orders
+WHERE DAYOFWEEK(order_date) IN (1,7);
+
+
+👉 1 = Sunday, 7 = Saturday
+
+Q6. Order date aur delivery date ke beech days ka difference
+SELECT 
+    order_id,
+    DATEDIFF(delivery_date, order_date) AS days_difference
+FROM orders;
+
+Q7. Last 6 months me join hue employees ki count
+SELECT COUNT(*) AS total_employees
+FROM employees
+WHERE join_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH);
+
+Q8. Pichhle 1 saal me purchase na karne wale customers
+SELECT *
+FROM customers
+WHERE last_purchase_date < DATE_SUB(CURDATE(), INTERVAL 1 YEAR)
+   OR last_purchase_date IS NULL;
+
+Q9. Next 30 days ke andar hone wale events
+SELECT *
+FROM events
+WHERE event_date BETWEEN CURDATE() 
+AND DATE_ADD(CURDATE(), INTERVAL 30 DAY);
+
+Q10. Last quarter ka total revenue
+SELECT SUM(amount) AS total_revenue
+FROM sales
+WHERE sale_date >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH);
+
+Q11. Sabse zyada active hour (login timestamps ke basis par)
+SELECT 
+    HOUR(login_time) AS active_hour,
+    COUNT(*) AS total_logins
+FROM logins
+GROUP BY active_hour
+ORDER BY total_logins DESC
+LIMIT 1;
+
+Q12. Current month vs Previous month sales comparison
+SELECT 
+    MONTH(order_date) AS month,
+    SUM(amount) AS total_sales
+FROM sales
+WHERE order_date >= DATE_SUB(CURDATE(), INTERVAL 2 MONTH)
+GROUP BY MONTH(order_date);
+
+Q13. Har month ka highest aur lowest transaction amount
+SELECT 
+    MONTH(transaction_date) AS month,
+    MAX(amount) AS highest_amount,
+    MIN(amount) AS lowest_amount
+FROM transactions
+GROUP BY MONTH(transaction_date);
+
+Q14. Average delivery time (DATEDIFF ka use)
+SELECT 
+    AVG(DATEDIFF(delivery_date, order_date)) AS avg_delivery_days
+FROM orders;
+
+Q15. Customers jinki first purchase exactly 1 saal pehle hui
+SELECT *
+FROM customers
+WHERE first_purchase_date = DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
+
+Q16. First name aur last name ko "Full Name" banana
+SELECT 
+    CONCAT(first_name, ' ', last_name) AS Full_Name
+FROM customers;
+
+Q17. Product code ke pehle 3 characters nikaalna
+SELECT 
+    LEFT(product_code, 3) AS product_prefix
+FROM products;
+
+Q18. City names ko uppercase me convert karna
+SELECT 
+    UPPER(city) AS city_name
+FROM addresses;
+
+Q19. Username se leading aur trailing spaces remove karna
+SELECT 
+    TRIM(username) AS clean_username
+FROM users;
+
+Q20. "Inc." ko "LLC" se replace karna
+SELECT 
+    REPLACE(company_name, 'Inc.', 'LLC') AS updated_company_name
+FROM companies;
+
+
+
+
+
+
+
+

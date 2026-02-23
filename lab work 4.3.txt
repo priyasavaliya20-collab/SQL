@@ -1,0 +1,219 @@
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    name VARCHAR(50),
+    salary INT,
+    department_id INT
+);
+
+INSERT INTO employees (employee_id, name, salary, department_id) VALUES
+(101, 'Rahul', 50000, 1),
+(102, 'Sneha', 60000, 2),
+(103, 'Amit', 45000, 1),
+(104, 'Pooja', 70000, 3),
+(105, 'Karan', 55000, 2);
+
+CREATE TABLE departments (
+    department_id INT PRIMARY KEY,
+    department_name VARCHAR(50)
+);
+
+INSERT INTO departments (department_id, department_name) VALUES
+(1, 'HR'),
+(2, 'Finance'),
+(3, 'IT');
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(50)
+);
+
+INSERT INTO customers (customer_id, customer_name) VALUES
+(201, 'Anil'),
+(202, 'Sunita'),
+(203, 'Ramesh'),
+(204, 'Geeta');
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT,
+    product_id INT,
+    product_price INT,
+    total_amount INT
+);
+
+INSERT INTO orders (order_id, customer_id, product_id, product_price, total_amount) VALUES
+(301, 201, 401, 1500, 1500),
+(302, 202, 402, 2500, 2500),
+(303, 201, 403, 1800, 3600),
+(304, 203, 401, 1500, 1500),
+(305, 204, 404, 3000, 3000);
+
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(50),
+    price INT,
+    supplier_id INT
+);
+
+INSERT INTO products (product_id, product_name, price, supplier_id) VALUES
+(401, 'Laptop', 50000, 501),
+(402, 'Smartphone', 20000, 502),
+(403, 'Printer', 7000, 501),
+(404, 'Headphones', 3000, 503);
+
+
+CREATE TABLE students (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    marks INT,
+    section CHAR(1)
+);
+
+INSERT INTO students (student_id, student_name, marks, section) VALUES
+(601, 'Aman', 85, 'A'),
+(602, 'Neha', 78, 'B'),
+(603, 'Ravi', 90, 'A'),
+(604, 'Meena', 82, 'B');
+
+
+CREATE TABLE exam_results (
+    student_id INT,
+    marks INT
+);
+
+INSERT INTO exam_results (student_id, marks) VALUES
+(601, 85),
+(602, 78),
+(603, 90),
+(604, 82);
+
+
+CREATE TABLE movies (
+    movie_id INT PRIMARY KEY,
+    movie_name VARCHAR(50),
+    genre VARCHAR(20),
+    rating FLOAT
+);
+
+INSERT INTO movies (movie_id, movie_name, genre, rating) VALUES
+(701, 'Inception', 'Action', 8.8),
+(702, 'Titanic', 'Romance', 7.8),
+(703, 'Avengers', 'Action', 8.5),
+(704, 'Interstellar', 'Sci-Fi', 8.6);
+
+
+QUESTION :- 1
+
+SELECT *
+FROM employees
+WHERE salary > (SELECT AVG(salary) FROM employees);
+
+QUESTION :- 2
+
+SELECT *
+FROM customers
+WHERE customer_id IN (SELECT customer_id FROM orders);
+
+QUESTION :- 3
+
+SELECT *
+FROM products
+WHERE price > (SELECT AVG(price) FROM products);
+
+QUESTION :- 4 
+
+SELECT *
+FROM exam_results
+WHERE marks > (SELECT AVG(marks) FROM exam_results);
+
+QUESTION :- 5
+
+SELECT department_id
+FROM employees
+GROUP BY department_id
+HAVING COUNT(*) > 5;
+
+QUESTION :- 6
+
+SELECT DISTINCT customer_id
+FROM orders
+WHERE product_price = (SELECT MAX(product_price) FROM orders);
+
+QUESTION :- 7
+
+SELECT *
+FROM employees
+WHERE department_id = (
+    SELECT department_id
+    FROM employees
+    WHERE employee_id = 101
+);
+
+QUESTION :- 8
+
+SELECT DISTINCT supplier_id
+FROM products
+WHERE product_id IN (
+    SELECT product_id
+    FROM orders
+    GROUP BY product_id
+    HAVING COUNT(*) > 100
+);
+
+QUESTION :- 9
+
+SELECT *
+FROM orders
+ORDER BY total_amount DESC
+LIMIT 5;
+
+QUESTION :- 10
+
+SELECT *
+FROM movies
+WHERE rating > (
+    SELECT AVG(rating)
+    FROM movies
+    WHERE genre = 'Action'
+);
+
+
+QUESTION :- 11
+
+SELECT MAX(salary)
+FROM employees
+WHERE salary < (SELECT MAX(salary) FROM employees);
+
+QUESTION :- 12
+
+SELECT *
+FROM students
+WHERE marks > (
+    SELECT MAX(marks)
+    FROM students
+    WHERE section = 'B'
+);
+
+QUESTION :- 13
+
+SELECT *
+FROM customers
+WHERE customer_id NOT IN (SELECT customer_id FROM orders);
+
+QUESTION :- 14
+
+SELECT *
+FROM employees e
+WHERE salary > (
+    SELECT AVG(salary)
+    FROM employees
+    WHERE department_id = e.department_id
+);
+
+QUESTION :- 15
+
+SELECT product_id
+FROM orders
+GROUP BY product_id
+ORDER BY SUM(total_amount) DESC
+LIMIT 1;
